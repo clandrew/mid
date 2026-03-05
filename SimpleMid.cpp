@@ -9,6 +9,7 @@
 
 HWND g_hDlg = NULL;
 HWND g_hDot = NULL;
+std::vector<int> notes;
 
 INT_PTR CALLBACK DialogMessageHandler(HWND, UINT, WPARAM, LPARAM);
 
@@ -92,77 +93,9 @@ DWORD WINAPI SoundThreadProc(LPVOID)
         return 0;
     }
 
-    std::vector<int> notes;
-    for (int i = 0; i < 2; ++i)
-    {
-        notes.push_back(424);
-        notes.push_back(282);
-        notes.push_back(212);
-        notes.push_back(142);
-
-        notes.push_back(424);
-        notes.push_back(302);
-        notes.push_back(212);
-        notes.push_back(152);
-
-        notes.push_back(424);
-        notes.push_back(282);
-        notes.push_back(212);
-        notes.push_back(142);
-
-        notes.push_back(404);
-        notes.push_back(262);
-        notes.push_back(202);
-        notes.push_back(132);
-    }
-    for (int i = 0; i < 2; ++i)
-    {
-        notes.push_back(382);
-        notes.push_back(252);
-        notes.push_back(192);
-        notes.push_back(126);
-
-        notes.push_back(382);
-        notes.push_back(272);
-        notes.push_back(192);
-        notes.push_back(126);
-
-        notes.push_back(382);
-        notes.push_back(252);
-        notes.push_back(192);
-        notes.push_back(126);
-
-        notes.push_back(362);
-        notes.push_back(238);
-        notes.push_back(182);
-        notes.push_back(120);
-
-    }
-    for (int i = 0; i < 4; ++i)
-    {
-        notes.push_back(342);
-        notes.push_back(222);
-        notes.push_back(168);
-        notes.push_back(112);
-
-        notes.push_back(342);
-        notes.push_back(238);
-        notes.push_back(168);
-        notes.push_back(118);
-
-        notes.push_back(342);
-        notes.push_back(248);
-        notes.push_back(168);
-        notes.push_back(126);
-
-        notes.push_back(342);
-        notes.push_back(238);
-        notes.push_back(168);
-        notes.push_back(118);
-    }
 
     std::vector<char> buffer;
-    int noteLength = 22000;
+    int noteLength = 66000;
     int amp = 5;
     for (int i = 0; i < notes.size(); ++i)
     {
@@ -223,13 +156,35 @@ void OnInit()
 
     int offs = 0xA6;
 
-    char note = midiFile[offs];
 
     // 0x43 == G
 
-    if (note == 0x43)
+    for (int i = 0; i < 7; ++i)
     {
-        // Square wave
+        char note = midiFile[offs];
+
+        if (note == 0x3E)
+        {
+            notes.push_back(372);
+        }
+        else if (note == 0x40)
+        {
+            notes.push_back(332); // F sharp
+        }
+        else if (note == 0x42)
+        {
+            notes.push_back(296); // G natural
+        }
+        else if (note == 0x43)
+        {
+            notes.push_back(282); //G
+        }
+        else if (note == 0x45)
+        {
+            notes.push_back(252); // A
+        }
+
+        offs += 9;
     }
 
     InitSound();
